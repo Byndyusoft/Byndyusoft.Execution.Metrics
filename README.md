@@ -1,85 +1,105 @@
-# Template Information (Delete this header before publishing package)
+# Что это?
 
-## .NET Nuget publishing template
-This is a template repository with github actions for .NET nuget packages creation and publishing
+Пакет `Byndyusoft.Execution.Metrics` - это набор инструментов для Open Telemetry,
+который позволяет получать согласованные метрики и трассы для всех основных операций сервиса.
 
-## How to use:
-- Rename ExampleSolution to your solution name (ExampleSolution => MyPackageSolution)
-- Delete project and add your projects or rename existing projects(ExampleProject => MyPackage). If your IDE does not support folders renaming, you also need to rename folders manually. 
-- Change properties in Directory.Build.props file according to your needs (version, package tags, repository url)
-- Fix **dotnet-version** in .github/workflows/\*.yml
+Под основной операцией понимается обработка http-запроса, выполнение периодического задания (hangfire), 
+обработка сообщений очереди (rabbit-mq, kafka) и т.п.
 
-## How to publish pre-release to nuget.org:
+# Зачем?
 
-Mark *This is a pre-release* checkbox when you create a release.
+Если возникает проблемы с метрикой, появляется необходимость найти связанные с ней трассы (и логи).
+Для этого в трассах должны быть все те же теги, что и в метриках.
+Иначе придётся перебирать все трассы в нужном интервале времени.
 
-![image](https://user-images.githubusercontent.com/38452272/184600138-abc74f6e-3c7e-4c0a-ad51-426473f02917.png)
+Одинаковая метрика для всех основных операций позволяет использовать одно и то же правило для алертинга
+и легко построить дашборд.
 
-The package version will be *<proj_version>-tags-<tag_name>* where *proj_version* is retrieved from .csproj or Directory.Build.props file.
+# Соглашения
 
-## Publishing README on Nuget 
-If you want to publish README on Nuget add this in package csproj file
-``` xml
-<ItemGroup>
-    <None Include="..\..\README.md" Pack="true" PackagePath="\"/>
-</ItemGroup>
+## Требования к набору тегов
+
+Для согласования метрик и трасс (и логов) в них должен быть один и тот же набор тегов:
+* тип операции
+* название операции
+* код статуса
+* результат. 
+
+Это минимальный необходимый набор, чтобы работали дашборды и алертинг.
+В метриках могут быть дополнительные теги, если этого требует проект. Например, тип документа.
+
+
+| Тег                 | Название метриках | Название в трассах | Примечание |
+|-|-|-|-|
+| Тип операции        | type              | type               | hangfire, rabbit-mq, kafka и т.п. |
+| Название операции   | operation         | Название спана     |  |
+| Код статуса         | status_code       | otel.status_code   | "ERROR" или "OK", если результат не установлен, то тег не выводится |
+| Результат           | result            | result             | "" или "200" или любой другой, если нужно различать ответы |
+
+## Требования к метрикам
+
+Метрика должна называться `execution_duration` и должна быть гистограммой.
+
+Т.е. должны быть `execution_duration_ms_bucket` с тегом `le`, `execution_duration_ms_sum` и `execution_duration_ms_count`.
+
+Пример: 
+```
+execution_duration_ms_bucket{operation="SendNotification",status_code="ERROR",status_description="",type="memory_queue",le="0"} 0 1695888400559
+execution_duration_ms_bucket{operation="SendNotification",status_code="ERROR",status_description="",type="memory_queue",le="5"} 0 1695888400559
+execution_duration_ms_bucket{operation="SendNotification",status_code="ERROR",status_description="",type="memory_queue",le="10"} 0 1695888400559
+execution_duration_ms_bucket{operation="SendNotification",status_code="ERROR",status_description="",type="memory_queue",le="25"} 0 1695888400559
+execution_duration_ms_bucket{operation="SendNotification",status_code="ERROR",status_description="",type="memory_queue",le="50"} 1 1695888400559
+execution_duration_ms_bucket{operation="SendNotification",status_code="ERROR",status_description="",type="memory_queue",le="75"} 1 1695888400559
+execution_duration_ms_bucket{operation="SendNotification",status_code="ERROR",status_description="",type="memory_queue",le="100"} 1 1695888400559
+execution_duration_ms_bucket{operation="SendNotification",status_code="ERROR",status_description="",type="memory_queue",le="250"} 1 1695888400559
+execution_duration_ms_bucket{operation="SendNotification",status_code="ERROR",status_description="",type="memory_queue",le="500"} 1 1695888400559
+execution_duration_ms_bucket{operation="SendNotification",status_code="ERROR",status_description="",type="memory_queue",le="1000"} 1 1695888400559
+execution_duration_ms_bucket{operation="SendNotification",status_code="ERROR",status_description="",type="memory_queue",le="+Inf"} 1 1695888400559
+execution_duration_ms_sum{operation="SendNotification",status_code="ERROR",status_description="",type="memory_queue"} 48.0471 1695888400559
+execution_duration_ms_count{operation="SendNotification",status_code="ERROR",status_description="",type="memory_queue"} 1 1695888400559
 ```
 
-[![License](https://img.shields.io/badge/License-Apache--2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+## Требования к именованию операций
 
-# ExampleProject [![Nuget](https://img.shields.io/nuget/v/ExampleProject.svg)](https://www.nuget.org/packages/ExampleProject/)[![Downloads](https://img.shields.io/nuget/dt/ExampleProject.svg)](https://www.nuget.org/packages/ExampleProject/)
+Название операции формируется по разному в зависимости от её типа:
+* **http** - "{GET|POST|etc} {url_template|url}". 
+Т.к. собираем в метрики, урл не должен зависеть от входящих параметров, иначе сборщику метрик будет плохо.
+* **hangfire** - "{Название операции из самого хенгфаера}"
+* **rabbit_mq** - "{Название очереди на которую подписаны}"
 
-Package description
 
-## Installing
+## Как пользоваться?
 
-```shell
-dotnet add package ExampleProject
+Чтобы заработала трассировка для операций, которые используют `ExecutionHandler`
+
+```
+.AddOpenTelemetryTracing(builder =>
+    builder.AddExecutionDurationInstrumentation()
+    ...
 ```
 
-## Usage
+Чтобы заработали метрики для операций, которые используют `ExecutionHandler`
 
-Usage description
-
-```csharp
-  TODO
+```
+.AddOpenTelemetryMetrics(builder =>
+    builder.AddExecutionDurationInstrumentation()
+    ...
 ```
 
-# ExampleProject.SecondPackage [![Nuget](https://img.shields.io/nuget/v/ExampleProject.SecondPackage.svg)](https://www.nuget.org/packages/ExampleProject.SecondPackage/)[![Downloads](https://img.shields.io/nuget/dt/ExampleProject.SecondPackage.svg)](https://www.nuget.org/packages/ExampleProject.SecondPackage/)
-
-Package description
-
-## Installing
-
-```shell
-dotnet add package ExampleProject.SecondPackage
+Чтобы заработали метрики для http-запросов и не было дублирования, нужно заменить `AddAspNetCoreInstrumentation`
+```
+.AddOpenTelemetryMetrics(builder =>
+    builder.AddHttpRequestExecutionDurationInstrumentation()
+    ...
 ```
 
-## Usage
+Чтобы писались метрики `hangfire`, нужно добавить фильтр 
+```
+services.AddHangfire((_, configuration) => 
+    configuration.UseFilter(new HangfireExecutionMetricDurationFilter())
+    ...
 
-Usage description
-
-```csharp
-  TODO
 ```
 
-# Contributing
 
-To contribute, you will need to setup your local environment, see [prerequisites](#prerequisites). For the contribution and workflow guide, see [package development lifecycle](#package-development-lifecycle).
-
-## Prerequisites
-
-Make sure you have installed all of the following prerequisites on your development machine:
-
-- Git - [Download & Install Git](https://git-scm.com/downloads). OSX and Linux machines typically have this already installed.
-- .NET (.net version) - [Download & Install .NET](https://dotnet.microsoft.com/en-us/download/dotnet/).
-
-## Package development lifecycle
-
-- Implement package logic in `src`
-- Add or adapt unit-tests (prefer before and simultaneously with coding) in `tests`
-- Add or change the documentation as needed
-- Open pull request in the correct branch. Target the project's `master` branch
-
-# Maintainers
-[github.maintain@byndyusoft.com](mailto:github.maintain@byndyusoft.com)
+Метрики для рэбита и прочих основных операций в разработке.
