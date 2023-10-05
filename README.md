@@ -86,7 +86,7 @@ execution_duration_ms_count{operation="SendNotification",status_code="ERROR",sta
 нужно добавить соответствующую инструментацию в трассировку:
 
 ```
-.AddOpenTelemetryTracing(builder =>
+.WithTracing(builder =>
     builder.AddExecutionDurationInstrumentation()
     ...
 ```
@@ -95,7 +95,7 @@ execution_duration_ms_count{operation="SendNotification",status_code="ERROR",sta
 нужно добавить соответствующую инструментацию в метрики:
 
 ```
-.AddOpenTelemetryMetrics(builder =>
+.WithMetrics(builder =>
     builder.AddExecutionDurationInstrumentation()
     ...
 ```
@@ -103,7 +103,7 @@ execution_duration_ms_count{operation="SendNotification",status_code="ERROR",sta
 Чтобы заработали метрики для http-запросов и не было дублирования со стандартными метриками,
 нужно заменить `AddAspNetCoreInstrumentation` на `AddHttpRequestExecutionDurationInstrumentation`
 ```
-.AddOpenTelemetryMetrics(builder =>
+.WithMetrics(builder =>
     builder.AddHttpRequestExecutionDurationInstrumentation()
     ...
 ```
