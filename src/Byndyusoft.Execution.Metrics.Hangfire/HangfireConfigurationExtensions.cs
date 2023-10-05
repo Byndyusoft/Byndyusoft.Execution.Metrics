@@ -9,8 +9,6 @@ public static class HangfireConfigurationExtensions
     /// <summary>
     ///     Добавить фильтр для получения метрик выполнения операций Hangfire
     /// </summary>
-    /// <param name="configuration"></param>
-    /// <returns></returns>
     public static IGlobalConfiguration<HangfireExecutionMetricDurationFilter> AddExecutionMetricDurationFilter(
         [NotNull] this IGlobalConfiguration configuration)
     {

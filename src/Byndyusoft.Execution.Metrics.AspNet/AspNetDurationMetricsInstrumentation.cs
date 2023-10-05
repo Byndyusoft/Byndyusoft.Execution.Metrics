@@ -2,7 +2,10 @@
 
 using System.Diagnostics;
 
-public class AspNetDurationMetricsInstrumentation :IDisposable
+/// <summary>
+///     Инструментация с получением метрик входящих http запросов
+/// </summary>
+public class AspNetDurationMetricsInstrumentation : IDisposable
 {
     private readonly IDisposable _subscription;
 

@@ -4,7 +4,6 @@ using System;
 using System.Diagnostics;
 using OpenTelemetry.Trace;
 
-
 /// <summary>
 ///     Создаёт Activity, необходимое для замера времени выполнения запросов и их трассировки
 /// </summary>
@@ -51,7 +50,8 @@ public class ExecutionHandler : IDisposable
         _hasResult = true;
     }
 
-    public static void Execute(string type, string name, Func<Activity?, string?> action, ActivityContext? parent = null)
+    public static void Execute(string type, string name, Func<Activity?, string?> action,
+        ActivityContext? parent = null)
     {
         using var executionHandler = new ExecutionHandler(type, name, parent);
         try
