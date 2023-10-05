@@ -11,7 +11,7 @@
 		<VersionPrefix>0.0.1</VersionPrefix>
 		<Authors>Byndyusoft</Authors>
 		
-		<PackageTags>Byndyusoft;NugetPackageExample</PackageTags>
+		<PackageTags>Byndyusoft;Metrics;Traces</PackageTags>
 		
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
