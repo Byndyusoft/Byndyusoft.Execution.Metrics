@@ -13,9 +13,9 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Byndyusoft.Execution.Metrics\Byndyusoft.Execution.Metrics.csproj" />
+		<ProjectReference Include="..\Byndyusoft.Execution.Metrics\Execution.Metrics.csproj" />
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />
-		<None Include="..\..\README.md" Pack="true" PackagePath="\"/>
+		<None Include="..\..\README.md" Pack="true" PackagePath="\" />
 	</ItemGroup>
 
 </Project>

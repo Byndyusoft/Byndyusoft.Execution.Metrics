@@ -23,11 +23,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 		.github\workflows\releasePrerelease.yml = .github\workflows\releasePrerelease.yml
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Byndyusoft.Execution.Metrics", "src\Byndyusoft.Execution.Metrics\Byndyusoft.Execution.Metrics.csproj", "{B205103E-8D61-4224-933E-5EC8B8432A02}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Execution.Metrics", "src\Byndyusoft.Execution.Metrics\Execution.Metrics.csproj", "{B205103E-8D61-4224-933E-5EC8B8432A02}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Byndyusoft.Execution.Metrics.Hangfire", "src\Byndyusoft.Execution.Metrics.Hangfire\Byndyusoft.Execution.Metrics.Hangfire.csproj", "{05189D71-EF53-4AA9-A2B4-DF7FF600EBEA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Execution.Metrics.Hangfire", "src\Byndyusoft.Execution.Metrics.Hangfire\Execution.Metrics.Hangfire.csproj", "{05189D71-EF53-4AA9-A2B4-DF7FF600EBEA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Byndyusoft.Execution.Metrics.AspNet", "src\Byndyusoft.Execution.Metrics.AspNet\Byndyusoft.Execution.Metrics.AspNet.csproj", "{BB82A90D-0581-4920-B9D6-2A55B2A08870}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Execution.Metrics.AspNet", "src\Byndyusoft.Execution.Metrics.AspNet\Execution.Metrics.AspNet.csproj", "{BB82A90D-0581-4920-B9D6-2A55B2A08870}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
