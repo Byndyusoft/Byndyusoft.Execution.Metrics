@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
@@ -14,13 +14,11 @@
 	<PropertyGroup>
 		<IsPackable>true</IsPackable>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
 	</PropertyGroup>
 
 	<ItemGroup>
 	  <ProjectReference Include="..\Byndyusoft.Execution.Metrics\Byndyusoft.Execution.Metrics.csproj" />
 	  <None Include="..\..\README.md" Pack="true" PackagePath="\"/>
-	  <None Include="..\..\LICENSE" Pack="true" PackagePath="\"/>
 	</ItemGroup>
 
 </Project>
