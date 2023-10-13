@@ -49,23 +49,23 @@
 
 Метрика должна называться `execution_duration` и должна быть гистограммой.
 
-Т.е. должны быть `execution_duration_ms_bucket` с тегом `le`, `execution_duration_ms_sum` и `execution_duration_ms_count`.
+Т.е. должны быть `execution_duration_milliseconds_bucket` с тегом `le`, `execution_duration_milliseconds_sum` и `execution_duration_milliseconds_count`.
 
 Пример: 
 ```
-execution_duration_ms_bucket{operation="SendNotification",status_code="ERROR",status_description="",type="memory_queue",le="0"} 0 1695888400559
-execution_duration_ms_bucket{operation="SendNotification",status_code="ERROR",status_description="",type="memory_queue",le="5"} 0 1695888400559
-execution_duration_ms_bucket{operation="SendNotification",status_code="ERROR",status_description="",type="memory_queue",le="10"} 0 1695888400559
-execution_duration_ms_bucket{operation="SendNotification",status_code="ERROR",status_description="",type="memory_queue",le="25"} 0 1695888400559
-execution_duration_ms_bucket{operation="SendNotification",status_code="ERROR",status_description="",type="memory_queue",le="50"} 1 1695888400559
-execution_duration_ms_bucket{operation="SendNotification",status_code="ERROR",status_description="",type="memory_queue",le="75"} 1 1695888400559
-execution_duration_ms_bucket{operation="SendNotification",status_code="ERROR",status_description="",type="memory_queue",le="100"} 1 1695888400559
-execution_duration_ms_bucket{operation="SendNotification",status_code="ERROR",status_description="",type="memory_queue",le="250"} 1 1695888400559
-execution_duration_ms_bucket{operation="SendNotification",status_code="ERROR",status_description="",type="memory_queue",le="500"} 1 1695888400559
-execution_duration_ms_bucket{operation="SendNotification",status_code="ERROR",status_description="",type="memory_queue",le="1000"} 1 1695888400559
-execution_duration_ms_bucket{operation="SendNotification",status_code="ERROR",status_description="",type="memory_queue",le="+Inf"} 1 1695888400559
-execution_duration_ms_sum{operation="SendNotification",status_code="ERROR",status_description="",type="memory_queue"} 48.0471 1695888400559
-execution_duration_ms_count{operation="SendNotification",status_code="ERROR",status_description="",type="memory_queue"} 1 1695888400559
+execution_duration_milliseconds_bucket{operation="SendNotification",status_code="ERROR",status_description="",type="memory_queue",le="0"} 0 1695888400559
+execution_duration_milliseconds_bucket{operation="SendNotification",status_code="ERROR",status_description="",type="memory_queue",le="5"} 0 1695888400559
+execution_duration_milliseconds_bucket{operation="SendNotification",status_code="ERROR",status_description="",type="memory_queue",le="10"} 0 1695888400559
+execution_duration_milliseconds_bucket{operation="SendNotification",status_code="ERROR",status_description="",type="memory_queue",le="25"} 0 1695888400559
+execution_duration_milliseconds_bucket{operation="SendNotification",status_code="ERROR",status_description="",type="memory_queue",le="50"} 1 1695888400559
+execution_duration_milliseconds_bucket{operation="SendNotification",status_code="ERROR",status_description="",type="memory_queue",le="75"} 1 1695888400559
+execution_duration_milliseconds_bucket{operation="SendNotification",status_code="ERROR",status_description="",type="memory_queue",le="100"} 1 1695888400559
+execution_duration_milliseconds_bucket{operation="SendNotification",status_code="ERROR",status_description="",type="memory_queue",le="250"} 1 1695888400559
+execution_duration_milliseconds_bucket{operation="SendNotification",status_code="ERROR",status_description="",type="memory_queue",le="500"} 1 1695888400559
+execution_duration_milliseconds_bucket{operation="SendNotification",status_code="ERROR",status_description="",type="memory_queue",le="1000"} 1 1695888400559
+execution_duration_milliseconds_bucket{operation="SendNotification",status_code="ERROR",status_description="",type="memory_queue",le="+Inf"} 1 1695888400559
+execution_duration_milliseconds_sum{operation="SendNotification",status_code="ERROR",status_description="",type="memory_queue"} 48.0471 1695888400559
+execution_duration_milliseconds_count{operation="SendNotification",status_code="ERROR",status_description="",type="memory_queue"} 1 1695888400559
 ```
 
 ## Требования к именованию операций
