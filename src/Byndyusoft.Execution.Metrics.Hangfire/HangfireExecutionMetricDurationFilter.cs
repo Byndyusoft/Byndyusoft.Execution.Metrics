@@ -11,7 +11,9 @@ public class HangfireExecutionMetricDurationFilter : IServerFilter
 
     public void OnPerforming(PerformingContext filterContext)
     {
-        var handler = new ExecutionHandler("hangfire", filterContext.BackgroundJob.Job.Type.Name);
+        var recurringJobId = filterContext.Connection.GetJobParameter(filterContext.BackgroundJob.Id, "RecurringJobId");
+
+        var handler = new ExecutionHandler("hangfire", recurringJobId ?? filterContext.BackgroundJob.Job.Type.Name);
         filterContext.Items.Add(HandlerKeyName, handler);
     }
 
