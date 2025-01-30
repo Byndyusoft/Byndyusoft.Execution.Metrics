@@ -10,7 +10,13 @@ namespace Byndyusoft.Execution.Metrics.AspNet;
 public sealed class AspNetCoreDiagnosticObserver : IObserver<DiagnosticListener>,
     IObserver<KeyValuePair<string, object?>>
 {
+    private readonly HttpRequestExecutionDurationInstrumentationOptions _instrumentationOptions;
     private readonly List<IDisposable> _subscriptions = new();
+
+    public AspNetCoreDiagnosticObserver(HttpRequestExecutionDurationInstrumentationOptions instrumentationOptions)
+    {
+        _instrumentationOptions = instrumentationOptions;
+    }
 
     void IObserver<DiagnosticListener>.OnNext(DiagnosticListener diagnosticListener)
     {
@@ -51,7 +57,7 @@ public sealed class AspNetCoreDiagnosticObserver : IObserver<DiagnosticListener>
         if (value.Value is not HttpContext context)
             return;
 
-        if (context.Request.Path.HasValue && context.Request.Path.Value.Contains("metrics"))
+        if (_instrumentationOptions.Filter?.Invoke(context) == false)
             return;
 
         var endpoint = context.GetEndpoint();

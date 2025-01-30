@@ -9,9 +9,10 @@ public class HttpRequestExecutionDurationInstrumentation : IDisposable
 {
     private readonly IDisposable _subscription;
 
-    public HttpRequestExecutionDurationInstrumentation()
+    public HttpRequestExecutionDurationInstrumentation(
+        HttpRequestExecutionDurationInstrumentationOptions instrumentationOptions)
     {
-        var observer = new AspNetCoreDiagnosticObserver();
+        var observer = new AspNetCoreDiagnosticObserver(instrumentationOptions);
         _subscription = DiagnosticListener.AllListeners.Subscribe(observer);
     }
 

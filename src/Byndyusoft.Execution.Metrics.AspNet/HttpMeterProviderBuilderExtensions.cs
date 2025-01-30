@@ -10,9 +10,14 @@ public static class HttpMeterProviderBuilderExtensions
     ///     Добавляет метрики длительности выполнения входящих http-запросов
     /// </summary>
     public static MeterProviderBuilder AddHttpRequestExecutionDurationInstrumentation(
-        this MeterProviderBuilder builder)
+        this MeterProviderBuilder builder,
+        Action<HttpRequestExecutionDurationInstrumentationOptions>? configureOptions)
     {
         builder.AddMeter(ExecutionDurationMeter.Name);
-        return builder.AddInstrumentation(() => new HttpRequestExecutionDurationInstrumentation());
+
+        var options = new HttpRequestExecutionDurationInstrumentationOptions();
+        configureOptions?.Invoke(options);
+
+        return builder.AddInstrumentation(() => new HttpRequestExecutionDurationInstrumentation(options));
     }
 }
