@@ -22,8 +22,7 @@ public class HttpRequestExecutionDurationInstrumentationOptions
     ///                     collected.
     ///                 </item>
     ///                 <item>
-    ///                     If filter returns <see langword="false" />, request is
-    ///                     NOT collected.
+    ///                     If filter returns <see langword="false" /> or throws an exception the request is NOT collected.
     ///                 </item>
     ///             </list>
     ///         </item>

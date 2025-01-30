@@ -57,7 +57,7 @@ public sealed class AspNetCoreDiagnosticObserver : IObserver<DiagnosticListener>
         if (value.Value is not HttpContext context)
             return;
 
-        if (_instrumentationOptions.Filter?.Invoke(context) == false)
+        if (ShouldCollect(context) == false)
             return;
 
         var endpoint = context.GetEndpoint();
@@ -73,5 +73,20 @@ public sealed class AspNetCoreDiagnosticObserver : IObserver<DiagnosticListener>
                 ? ActivityStatusCode.Error
                 : ActivityStatusCode.Ok,
             context.Response.StatusCode.ToString());
+    }
+
+    private bool ShouldCollect(HttpContext httpContext)
+    {
+        if (_instrumentationOptions.Filter is null)
+            return true;
+
+        try
+        {
+            return _instrumentationOptions.Filter(httpContext);
+        }
+        catch
+        {
+            return false;
+        }
     }
 }
