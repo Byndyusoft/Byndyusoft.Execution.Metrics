@@ -108,6 +108,14 @@ execution_duration_milliseconds_count{operation="SendNotification",status_code="
     ...
 ```
 
+Чтобы фильтровать запросы, которые нужно фильтровать, то можно добавить настройки фильтрации. Например:
+```
+.WithMetrics(builder =>
+    builder.AddHttpRequestExecutionDurationInstrumentation(options.Filter = 
+        context => context.Request.Path.StartsWithSegments("/metrics") == false))
+    ...
+```
+
 Чтобы писались метрики `hangfire`, нужно добавить соответствующий фильтр 
 ```
 services.AddHangfire((_, configuration) => 
