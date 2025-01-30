@@ -1,6 +1,6 @@
-﻿namespace Byndyusoft.Execution.Metrics;
+﻿using OpenTelemetry.Trace;
 
-using OpenTelemetry.Trace;
+namespace Byndyusoft.Execution.Metrics;
 
 public static class TracerProviderBuilderExtensions
 {

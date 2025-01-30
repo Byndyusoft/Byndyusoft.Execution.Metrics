@@ -1,8 +1,7 @@
-﻿namespace Byndyusoft.Execution.Metrics;
-
-using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using OpenTelemetry.Trace;
+
+namespace Byndyusoft.Execution.Metrics;
 
 /// <summary>
 ///     Создаёт Activity, необходимое для замера времени выполнения запросов и их трассировки
@@ -13,13 +12,13 @@ public class ExecutionHandler : IDisposable
     public static readonly ActivitySource ExecutionMetricsSource = new(ActivitySourceName);
     private bool _hasResult;
 
-    public Activity? Activity { get; }
-
     public ExecutionHandler(string type, string operationName, ActivityContext? parent = null)
     {
         Activity = ExecutionMetricsSource.StartActivity(operationName, ActivityKind.Internal, parent ?? default);
         Activity?.AddTag("type", type);
     }
+
+    public Activity? Activity { get; }
 
     public void Dispose()
     {

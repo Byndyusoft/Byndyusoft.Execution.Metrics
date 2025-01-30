@@ -2,6 +2,7 @@
 using Hangfire;
 using Hangfire.Annotations;
 
+// ReSharper disable once CheckNamespace
 namespace Byndyusoft.Execution.Metrics;
 
 public static class HangfireConfigurationExtensions

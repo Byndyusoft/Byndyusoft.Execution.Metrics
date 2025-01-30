@@ -1,15 +1,15 @@
-﻿namespace Byndyusoft.Execution.Metrics.AspNet;
+﻿using System.Diagnostics;
 
-using System.Diagnostics;
+namespace Byndyusoft.Execution.Metrics.AspNet;
 
 /// <summary>
 ///     Инструментация с получением метрик входящих http запросов
 /// </summary>
-public class AspNetDurationMetricsInstrumentation : IDisposable
+public class HttpRequestExecutionDurationInstrumentation : IDisposable
 {
     private readonly IDisposable _subscription;
 
-    public AspNetDurationMetricsInstrumentation()
+    public HttpRequestExecutionDurationInstrumentation()
     {
         var observer = new AspNetCoreDiagnosticObserver();
         _subscription = DiagnosticListener.AllListeners.Subscribe(observer);

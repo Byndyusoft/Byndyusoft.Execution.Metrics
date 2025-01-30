@@ -1,10 +1,9 @@
-using AutoFixture;
 using NUnit.Framework;
 
 namespace Byndyusoft.ExampleTestsProject
 {
     [TestFixture]
-    public partial class ExampleClassTests
+    public class ExampleClassTests
     {
         [Test]
         public void Test_ExampleAddMethod_WithRandomInput()

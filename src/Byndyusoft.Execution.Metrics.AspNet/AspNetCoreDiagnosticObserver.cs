@@ -1,14 +1,14 @@
-﻿namespace Byndyusoft.Execution.Metrics.AspNet;
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+
+namespace Byndyusoft.Execution.Metrics.AspNet;
 
 /// <summary>
 ///     Снимает метрики длительности выполнения входящих http-запросов
 /// </summary>
 public sealed class AspNetCoreDiagnosticObserver : IObserver<DiagnosticListener>,
-                                                   IObserver<KeyValuePair<string, object?>>
+    IObserver<KeyValuePair<string, object?>>
 {
     private readonly List<IDisposable> _subscriptions = new();
 
@@ -57,15 +57,15 @@ public sealed class AspNetCoreDiagnosticObserver : IObserver<DiagnosticListener>
         var endpoint = context.GetEndpoint();
         var target = (endpoint as RouteEndpoint)?.RoutePattern.RawText ?? endpoint?.DisplayName ?? context.Request.Path;
         var name = context.Request.Method == HttpMethods.Options
-                       ? context.Request.Method
-                       : context.Request.Method + " " + target;
+            ? context.Request.Method
+            : context.Request.Method + " " + target;
 
         ExecutionDurationMeter.Record(activity.Duration.TotalMilliseconds,
-                                      "http",
-                                      name,
-                                      context.Response.StatusCode is >= 500 and < 600
-                                          ? ActivityStatusCode.Error 
-                                          : ActivityStatusCode.Ok ,
-                                      context.Response.StatusCode.ToString());
+            "http",
+            name,
+            context.Response.StatusCode is >= 500 and < 600
+                ? ActivityStatusCode.Error
+                : ActivityStatusCode.Ok,
+            context.Response.StatusCode.ToString());
     }
 }

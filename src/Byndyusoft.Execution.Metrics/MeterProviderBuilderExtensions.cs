@@ -1,6 +1,6 @@
-﻿namespace Byndyusoft.Execution.Metrics;
+﻿using OpenTelemetry.Metrics;
 
-using OpenTelemetry.Metrics;
+namespace Byndyusoft.Execution.Metrics;
 
 public static class MeterProviderBuilderExtensions
 {
