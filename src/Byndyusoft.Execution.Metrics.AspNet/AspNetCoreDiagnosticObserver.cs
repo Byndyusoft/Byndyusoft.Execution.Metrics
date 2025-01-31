@@ -7,7 +7,8 @@ namespace Byndyusoft.Execution.Metrics.AspNet;
 /// <summary>
 ///     Снимает метрики длительности выполнения входящих http-запросов
 /// </summary>
-public sealed class AspNetCoreDiagnosticObserver : IObserver<DiagnosticListener>,
+public sealed class AspNetCoreDiagnosticObserver : 
+    IObserver<DiagnosticListener>,
     IObserver<KeyValuePair<string, object?>>
 {
     private readonly HttpRequestExecutionDurationInstrumentationOptions _instrumentationOptions;
