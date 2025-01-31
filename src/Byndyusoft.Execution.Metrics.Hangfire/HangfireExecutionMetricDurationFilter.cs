@@ -1,6 +1,6 @@
-﻿namespace Byndyusoft.Execution.Metrics.Hangfire;
+﻿using Hangfire.Server;
 
-using global::Hangfire.Server;
+namespace Byndyusoft.Execution.Metrics.Hangfire;
 
 /// <summary>
 ///     Фильтр, который собирает трассировку и время выполнения запущенных заданий

@@ -85,7 +85,7 @@ execution_duration_milliseconds_count{operation="SendNotification",status_code="
 Чтобы заработала трассировка для операций, которые используют для метрик `ExecutionHandler`,
 нужно добавить соответствующую инструментацию в трассировку:
 
-```
+```csharp
 .WithTracing(builder =>
     builder.AddExecutionDurationInstrumentation()
     ...
@@ -94,7 +94,7 @@ execution_duration_milliseconds_count{operation="SendNotification",status_code="
 Чтобы заработали метрики для операций, которые используют `ExecutionHandler`,
 нужно добавить соответствующую инструментацию в метрики:
 
-```
+```csharp
 .WithMetrics(builder =>
     builder.AddExecutionDurationInstrumentation()
     ...
@@ -102,14 +102,27 @@ execution_duration_milliseconds_count{operation="SendNotification",status_code="
 
 Чтобы заработали метрики для http-запросов и не было дублирования со стандартными метриками,
 нужно заменить `AddAspNetCoreInstrumentation` на `AddHttpRequestExecutionDurationInstrumentation`
-```
+
+```csharp
 .WithMetrics(builder =>
     builder.AddHttpRequestExecutionDurationInstrumentation()
     ...
 ```
 
-Чтобы писались метрики `hangfire`, нужно добавить соответствующий фильтр 
+В текущей версии фильтрация по пути */metrics* отключена.
+Чтобы фильтровать только нужные запросы, то можно добавить настройки фильтрации. 
+Например:
+
+```csharp
+.WithMetrics(builder =>
+    builder.AddHttpRequestExecutionDurationInstrumentation(options.Filter = 
+        context => context.Request.Path.StartsWithSegments("/metrics") == false))
+    ...
 ```
+
+Чтобы писались метрики `hangfire`, нужно добавить соответствующий фильтр 
+
+```csharp
 services.AddHangfire((_, configuration) => 
     configuration.AddHangfireExecutionMetricDurationFilter()
     ...

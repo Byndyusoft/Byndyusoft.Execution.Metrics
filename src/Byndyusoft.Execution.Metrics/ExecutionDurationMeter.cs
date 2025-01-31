@@ -14,19 +14,21 @@ public static class ExecutionDurationMeter
     private static readonly Meter Meter = new(Name);
     private static readonly Histogram<double> Instrument = Meter.CreateHistogram<double>("execution.duration", "ms");
 
-    public static void Record(double duration, string? type, string? operationName, ActivityStatusCode statusCode, string? result)
+    public static void Record(double duration, string? type, string? operationName, ActivityStatusCode statusCode,
+        string? result)
     {
         Instrument.Record(duration,
-                          new TagList
-                              {
-                                  new("type", type),
-                                  new("operation", operationName),
-                                  new("status_code", statusCode switch {
-                                          ActivityStatusCode.Ok => "OK",
-                                          ActivityStatusCode.Error => "ERROR",
-                                          _ => ""
-                                      }),
-                                  new ("result", result ?? "")
-                              });
+            new TagList
+            {
+                new("type", type),
+                new("operation", operationName),
+                new("status_code", statusCode switch
+                {
+                    ActivityStatusCode.Ok => "OK",
+                    ActivityStatusCode.Error => "ERROR",
+                    _ => ""
+                }),
+                new("result", result ?? "")
+            });
     }
 }

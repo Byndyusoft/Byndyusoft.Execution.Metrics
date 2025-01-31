@@ -1,7 +1,8 @@
-namespace Byndyusoft.Execution.Metrics;
-
-using AspNet;
+using Byndyusoft.Execution.Metrics.AspNet;
 using OpenTelemetry.Metrics;
+
+// ReSharper disable once CheckNamespace
+namespace Byndyusoft.Execution.Metrics;
 
 public static class HttpMeterProviderBuilderExtensions
 {
@@ -9,9 +10,14 @@ public static class HttpMeterProviderBuilderExtensions
     ///     Добавляет метрики длительности выполнения входящих http-запросов
     /// </summary>
     public static MeterProviderBuilder AddHttpRequestExecutionDurationInstrumentation(
-        this MeterProviderBuilder builder)
+        this MeterProviderBuilder builder,
+        Action<HttpRequestExecutionDurationInstrumentationOptions>? configureOptions)
     {
         builder.AddMeter(ExecutionDurationMeter.Name);
-        return builder.AddInstrumentation(() => new AspNetDurationMetricsInstrumentation());
+
+        var options = new HttpRequestExecutionDurationInstrumentationOptions();
+        configureOptions?.Invoke(options);
+
+        return builder.AddInstrumentation(() => new HttpRequestExecutionDurationInstrumentation(options));
     }
 }
